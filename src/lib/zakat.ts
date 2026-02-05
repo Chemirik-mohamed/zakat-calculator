@@ -6,8 +6,12 @@ const NISAB_GRAMS = {
   silver: 595,
 } as const
 
+export function computeNisabDecimal(basis: NisabBasis, pricePerGram: number) {
+  return new Decimal(pricePerGram).mul(NISAB_GRAMS[basis])
+}
+
 export function computeNisab(basis: NisabBasis, pricePerGram: number) {
-  return new Decimal(pricePerGram).mul(NISAB_GRAMS[basis]).toNumber()
+  return computeNisabDecimal(basis, pricePerGram).toNumber()
 }
 
 export function computeZakat(amount: number) {

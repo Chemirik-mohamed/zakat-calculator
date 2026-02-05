@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import Decimal from 'decimal.js'
 import type { NisabBasis } from '../lib/types'
-import { computeNisab, computeZakat } from '../lib/zakat'
+import { computeNisabDecimal, computeZakat } from '../lib/zakat'
 
 export type ZakatCalculation = {
   isDue: boolean
@@ -17,8 +17,11 @@ export function useZakatCalculation(
   hawlConfirmed: boolean,
 ): ZakatCalculation {
   return useMemo(() => {
-    const nisabRounded = new Decimal(computeNisab(basis, pricePerGram)).toDecimalPlaces(2)
+    const nisabDecimal = computeNisabDecimal(basis, pricePerGram)
+    const nisabRounded = nisabDecimal.toDecimalPlaces(2)
     const amountRounded = new Decimal(amount).toDecimalPlaces(2)
+    const nisabCents = nisabRounded.mul(100).toDecimalPlaces(0, Decimal.ROUND_HALF_UP)
+    const amountCents = amountRounded.mul(100).toDecimalPlaces(0, Decimal.ROUND_HALF_UP)
     if (!hawlConfirmed) {
       return {
         isDue: false,
@@ -26,7 +29,7 @@ export function useZakatCalculation(
         reason: 'Le Hawl (année lunaire complète) n’est pas confirmé.',
       }
     }
-    if (amountRounded.lessThan(nisabRounded)) {
+    if (amountCents.lessThan(nisabCents)) {
       return {
         isDue: false,
         nisab: nisabRounded.toNumber(),
