@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-navy: #0b1f2a;
+  --color-gold: #c9a44c;
+  --color-sand: #f6f1e8;
+  --color-slate: #475569;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-serif: 'IBM Plex Serif', serif;
+}
+
+@layer base {
+  body {
+    @apply min-h-screen bg-[radial-gradient(1200px_800px_at_20%_0%,#ffffff_0%,#f6f1e8_55%,#f0e7d6_100%)] text-navy font-sans;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-serif tracking-tight;
+  }
+
+  a {
+    @apply text-navy underline underline-offset-4 decoration-gold/60;
+  }
+
+  a:hover {
+    @apply decoration-gold;
+  }
+}
